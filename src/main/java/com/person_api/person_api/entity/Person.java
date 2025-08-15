@@ -1,7 +1,9 @@
 package com.person_api.person_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.person_api.person_api.entity.enums.GenderEnum;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +15,7 @@ import java.time.Period;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tb_person")
 public class Person implements Serializable {
 
     @Id
@@ -22,6 +25,7 @@ public class Person implements Serializable {
     @NotNull(message = "O campo nome não pode ser nulo!")
     private String name;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     @CPF(message = "CPF inválido")
