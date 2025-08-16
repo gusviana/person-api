@@ -16,7 +16,8 @@ public class PersonController {
 
     @GetMapping
     public ResponseEntity<Person> findAll(){
-        Person p = new Person(null, GenderEnum.MALE, "350.522.908-37", LocalDate.of(1995, 2, 1), "Gustavo Viana");
+        Person p = new Person(null, GenderEnum.MALE, "350.522.908-37", LocalDate.of(1995, 2,
+                1), "Gustavo Viana");
         return ResponseEntity.ok().body(p);
     }
 
