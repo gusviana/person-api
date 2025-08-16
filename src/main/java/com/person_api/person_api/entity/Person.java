@@ -1,5 +1,6 @@
 package com.person_api.person_api.entity;
 
+import jakarta.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.person_api.person_api.entity.enums.GenderEnum;
 import jakarta.persistence.Id;
