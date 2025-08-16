@@ -2,11 +2,13 @@ package com.person_api.person_api.controller;
 
 import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.entity.enums.GenderEnum;
+import com.person_api.person_api.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,11 +16,26 @@ import java.util.List;
 @RequestMapping(value = "/persons")
 public class PersonController {
 
+    @Autowired
+    private PersonService personService;
+
     @GetMapping
-    public ResponseEntity<Person> findAll(){
-        Person p = new Person(null, GenderEnum.MALE, "350.522.908-37", LocalDate.of(1995, 2,
-                1), "Gustavo Viana");
-        return ResponseEntity.ok().body(p);
+    public ResponseEntity<List<Person>> findAll(){
+        List<Person> list = personService.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Person> findById(@PathVariable Long id){
+        Person person = personService.findById(id);
+        return ResponseEntity.ok().body(person);
+    }
+
+    @PostMapping
+    public ResponseEntity<Person> insert(@RequestBody Person person){
+        person = personService.insert(person);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(person.getId()).toUri();
+        return ResponseEntity.created(uri).body(person);
     }
 
 }
