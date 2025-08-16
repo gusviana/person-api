@@ -38,4 +38,10 @@ public class PersonController {
         return ResponseEntity.created(uri).body(person);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        personService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
