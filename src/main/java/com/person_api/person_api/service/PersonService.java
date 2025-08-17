@@ -30,4 +30,15 @@ public class PersonService {
     public void delete(Long id){
         personRepository.deleteById(id);
     }
+
+    public Person update(Long id, Person person){
+        Person entity = personRepository.getReferenceById(id);
+        updateData(entity, person);
+        return personRepository.save(entity);
+    }
+
+    private void updateData(Person entity, Person person){
+        entity.setName(person.getName());
+        entity.setDataNascimento(person.getDataNascimento());
+    }
 }
