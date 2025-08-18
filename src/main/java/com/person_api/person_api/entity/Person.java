@@ -1,13 +1,10 @@
 package com.person_api.person_api.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.person_api.person_api.entity.enums.GenderEnum;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.io.Serializable;
@@ -31,6 +28,7 @@ public class Person implements Serializable {
 
     @CPF(message = "CPF inválido")
     @NotNull
+    @Column(unique = true)
     private String cpf;
 
     private GenderEnum genderEnum;
