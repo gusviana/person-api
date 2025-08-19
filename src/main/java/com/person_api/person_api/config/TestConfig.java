@@ -21,9 +21,5 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Person p1 = new Person(null, GenderEnum.MALE, "350.522.908-37", LocalDate.of(1995, 2,
-                1), "Gustavo Viana");
-
-        personRepository.save((p1));
     }
 }

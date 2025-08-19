@@ -52,6 +52,11 @@ public class PersonController {
         return ResponseEntity.created(uri).body(person);
     }
 
+    @Operation(description = "Deleta uma pessoa por Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pessoa deletada com sucesso."),
+            @ApiResponse(responseCode = "500", description = "Id não existe")
+    })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         personService.delete(id);
