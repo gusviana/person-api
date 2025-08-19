@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByOrderByNameAsc();
 
+    Optional<Person> findByCpf(String cpf);
+
 }

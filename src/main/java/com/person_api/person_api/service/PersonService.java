@@ -25,6 +25,11 @@ public class PersonService {
         return person.get();
     }
 
+    public Person findByCpf(String cpf){
+        return personRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com CPF: " + cpf));
+    }
+
     public Person insert(Person person) {
         return personRepository.save(person);
     }

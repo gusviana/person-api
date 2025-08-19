@@ -1,5 +1,6 @@
 package com.person_api.person_api.entity;
 
+import com.person_api.person_api.entity.enums.GenderEnumConverter;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.person_api.person_api.entity.enums.GenderEnum;
@@ -31,6 +32,8 @@ public class Person implements Serializable {
     @Column(unique = true)
     private String cpf;
 
+    @Convert(converter = GenderEnumConverter.class)
+    @Column(name = "gender")
     private GenderEnum genderEnum;
 
     public Person() {
