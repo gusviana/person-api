@@ -60,6 +60,18 @@ public class PersonController {
         return ResponseEntity.ok(person);
     }
 
+    @Operation(summary = "retorna pessoa com as 3 letras iniciais",description = "retorna pessoa com as 3 letras iniciais")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pessoa encontrada"),
+            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
+            @ApiResponse(responseCode = "400", description = "CPF inválido")
+    })
+    @GetMapping("/prefix/{prefix}")
+    public ResponseEntity <List<Person>> findByPrefix(@RequestParam String prefix){
+        List<Person> list = personService.findByPrefix(prefix);
+        return ResponseEntity.ok(list);
+    }
+
     @Operation(summary = "Insere uma nova pessoa", description = "Insere uma nova pessoa")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "pessoa criada com sucesso"),

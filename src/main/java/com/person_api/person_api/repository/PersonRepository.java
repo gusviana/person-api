@@ -11,4 +11,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByCpf(String cpf);
 
+    List<Person> findByNameStartingWithIgnoreCaseOrderByName(String prefix);
+
 }

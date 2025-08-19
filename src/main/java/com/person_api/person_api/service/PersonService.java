@@ -30,6 +30,13 @@ public class PersonService {
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com CPF: " + cpf));
     }
 
+    public List<Person> findByPrefix(String prefix){
+        if(prefix == null || prefix.length() < 3){
+            return Collections.emptyList();
+        }
+        return personRepository.findByNameStartingWithIgnoreCaseOrderByName(prefix);
+    }
+
     public Person insert(Person person) {
         return personRepository.save(person);
     }

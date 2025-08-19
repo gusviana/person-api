@@ -1,5 +1,6 @@
 package com.person_api.person_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.person_api.person_api.entity.enums.GenderEnumConverter;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,10 +22,12 @@ public class Person implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @NotNull(message = "O campo nome não pode ser nulo!")
     private String name;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonProperty("data_nascimento")
     private LocalDate dataNascimento;
 
     @CPF(message = "CPF inválido")
