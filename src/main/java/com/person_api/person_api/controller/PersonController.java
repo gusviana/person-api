@@ -1,5 +1,6 @@
 package com.person_api.person_api.controller;
 
+import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.entity.enums.GenderEnum;
 import com.person_api.person_api.service.PersonService;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +23,10 @@ import java.util.Optional;
 @RestController
 @Tag(name = "Person", description = "API para gerenciar pessoas")
 @RequestMapping(value = "/persons")
+@RequiredArgsConstructor
 public class PersonController {
 
-    @Autowired
-    private PersonService personService;
+    private final PersonService personService;
 
     @Operation(summary = "Retorna todas as pessoas cadastradas", description = "Retorna todas as pessoas cadastradas")
     @ApiResponses(value = {

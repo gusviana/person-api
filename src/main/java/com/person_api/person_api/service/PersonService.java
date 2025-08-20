@@ -1,7 +1,11 @@
 package com.person_api.person_api.service;
 
+import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
+import com.person_api.person_api.mapper.PersonMapper;
 import com.person_api.person_api.repository.PersonRepository;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +13,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PersonService {
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
+    private final PersonMapper personMapper;
 
     public List<Person> findAll() {
+        personRepository.findAll().stream().map(it -> personMapper.toDtoList(it)).collect(Collectors.toList());
+
+
         return personRepository.findAllByOrderByNameAsc();
     }
 

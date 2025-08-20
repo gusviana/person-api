@@ -1,5 +1,6 @@
 package com.person_api.person_api.repository;
 
+import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 

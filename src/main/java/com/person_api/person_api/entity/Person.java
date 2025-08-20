@@ -22,6 +22,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
+@Builder
 public class Person implements Serializable {
 
     @Id
@@ -43,6 +44,7 @@ public class Person implements Serializable {
 
     @Convert(converter = GenderEnumConverter.class)
     @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
     private GenderEnum genderEnum;
 
     public Integer getIdade() {
