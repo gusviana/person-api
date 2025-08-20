@@ -22,46 +22,53 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
 
-    public List<Person> findAll() {
-        personRepository.findAll().stream().map(it -> personMapper.toDtoList(it)).collect(Collectors.toList());
-
-
-        return personRepository.findAllByOrderByNameAsc();
+    public List<PersonDto> findAll() {
+        return personRepository.findAllByOrderByNameAsc()
+                .stream().map(personMapper::toDto).toList();
     }
 
-    public Person findById(Long id) {
-        Optional<Person> person = personRepository.findById(id);
-        return person.get();
+    public PersonDto findById(Long id) {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+        return personMapper.toDto(person);
     }
 
-    public Person findByCpf(String cpf){
-        return personRepository.findByCpf(cpf)
+    public PersonDto findByCpf(String cpf){
+        Person person = personRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com CPF: " + cpf));
+        return personMapper.toDto(person);
     }
 
-    public List<Person> findByPrefix(String prefix){
+    public List<PersonDto> findByPrefix(String prefix){
         if(prefix == null || prefix.length() < 3){
             return Collections.emptyList();
         }
-        return personRepository.findByNameStartingWithIgnoreCaseOrderByName(prefix);
+        return personRepository.findByNameStartingWithIgnoreCaseOrderByName(prefix)
+                .stream().map(personMapper::toDto).toList();
     }
 
-    public Person insert(Person person) {
-        return personRepository.save(person);
+    public PersonDto insert(PersonDto dto) {
+        Person entity = personMapper.toEntity(dto);
+        entity = personRepository.save(entity);
+        return personMapper.toDto(entity);
     }
 
     public void delete(Long id) {
         personRepository.deleteById(id);
     }
 
-    public Person update(Long id, Person person) {
-        Person entity = personRepository.getReferenceById(id);
-        updateData(entity, person);
-        return personRepository.save(entity);
+    public PersonDto update(Long id, PersonDto dto) {
+        Person entity = personRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+        updateData(entity, dto);
+        Person updated = personRepository.save(entity);
+        return personMapper.toDto(updated);
     }
 
-    private void updateData(Person entity, Person person) {
-        entity.setName(person.getName());
-        entity.setDataNascimento(person.getDataNascimento());
+    private void updateData(Person entity, PersonDto dto) {
+        entity.setName(dto.getName());
+        entity.setDataNascimento(dto.getDataNascimento());
+        entity.setCpf(dto.getCpf());
+        entity.setGenderEnum(dto.getGenderEnum());
     }
 }

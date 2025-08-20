@@ -34,8 +34,8 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = "Not found caso seja passada URL incorreta")
     })
     @GetMapping
-    public ResponseEntity<List<Person>> findAll(){
-        List<Person> list = personService.findAll();
+    public ResponseEntity<List<PersonDto>> findAll(){
+        List<PersonDto> list = personService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -45,8 +45,8 @@ public class PersonController {
             @ApiResponse(responseCode = "500", description = "Id não existe")
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Person> findById(@PathVariable Long id){
-        Person person = personService.findById(id);
+    public ResponseEntity<PersonDto> findById(@PathVariable Long id){
+        PersonDto person = personService.findById(id);
         return ResponseEntity.ok().body(person);
     }
 
@@ -57,8 +57,8 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = "CPF inválido")
     })
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<Person> findByCpf(@PathVariable String cpf) {
-        Person person = personService.findByCpf(cpf);
+    public ResponseEntity<PersonDto> findByCpf(@PathVariable String cpf) {
+        PersonDto person = personService.findByCpf(cpf);
         return ResponseEntity.ok(person);
     }
 
@@ -69,8 +69,8 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = "CPF inválido")
     })
     @GetMapping("/prefix/{prefix}")
-    public ResponseEntity <List<Person>> findByPrefix(@RequestParam String prefix){
-        List<Person> list = personService.findByPrefix(prefix);
+    public ResponseEntity <List<PersonDto>> findByPrefix(@RequestParam String prefix){
+        List<PersonDto> list = personService.findByPrefix(prefix);
         return ResponseEntity.ok(list);
     }
 
@@ -80,7 +80,7 @@ public class PersonController {
             @ApiResponse(responseCode = "500", description = "dados passados incorretamente")
     })
     @PostMapping
-    public ResponseEntity<Person> insert(@RequestBody Person person){
+    public ResponseEntity<PersonDto> insert(@RequestBody PersonDto person){
         person = personService.insert(person);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(person.getId()).toUri();
         return ResponseEntity.created(uri).body(person);
@@ -103,9 +103,9 @@ public class PersonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person person){
-        person = personService.update(id, person);
-        return ResponseEntity.ok().body(person);
+    public ResponseEntity<PersonDto> update(@PathVariable Long id, @RequestBody PersonDto dto){
+        dto = personService.update(id, dto);
+        return ResponseEntity.ok().body(dto);
     }
 
 }
