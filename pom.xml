@@ -64,6 +64,13 @@
             <version>2.8.9</version>
         </dependency>
 
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version> <!-- última versão estável (2025) -->
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
