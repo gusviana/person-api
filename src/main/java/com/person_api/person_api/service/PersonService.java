@@ -33,14 +33,14 @@ public class PersonService {
         return personMapper.toDto(person);
     }
 
-    public PersonDto findByCpf(String cpf){
+    public PersonDto findByCpf(String cpf) {
         Person person = personRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com CPF: " + cpf));
         return personMapper.toDto(person);
     }
 
-    public List<PersonDto> findByPrefix(String prefix){
-        if(prefix == null || prefix.length() < 3){
+    public List<PersonDto> findByPrefix(String prefix) {
+        if (prefix == null || prefix.length() < 3) {
             return Collections.emptyList();
         }
         return personRepository.findByNameStartingWithIgnoreCaseOrderByName(prefix)
