@@ -26,7 +26,6 @@ import java.util.Optional;
 @Tag(name = "Person", description = "API para gerenciar pessoas")
 @RequestMapping(value = "/persons")
 @RequiredArgsConstructor
-@Slf4j
 public class PersonController {
 
     private final PersonService personService;
@@ -38,7 +37,6 @@ public class PersonController {
     })
     @GetMapping
     public ResponseEntity<List<PersonDto>> findAll(){
-        log.info("Requisição para Listar todas pessoas cadastradas");
         List<PersonDto> list = personService.findAll();
         return ResponseEntity.ok().body(list);
     }
@@ -50,9 +48,7 @@ public class PersonController {
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<PersonDto> findById(@PathVariable Long id){
-        log.info("Buscar pessoa pelo  ID: {}", id);
         PersonDto person = personService.findById(id);
-        log.info("Pessoa encontrada: {}", person.getName());
         return ResponseEntity.ok().body(person);
     }
 
@@ -64,9 +60,7 @@ public class PersonController {
     })
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<PersonDto> findByCpf(@PathVariable String cpf) {
-        log.info("Iniciando busca de pessoa pelo cpf");
         PersonDto person = personService.findByCpf(cpf);
-        log.info("Pessoa encontrada: {}", person.getName());
         return ResponseEntity.ok(person);
     }
 
@@ -78,9 +72,7 @@ public class PersonController {
     })
     @GetMapping("/prefix/{prefix}")
     public ResponseEntity <List<PersonDto>> findByPrefix(@RequestParam String prefix){
-        log.info("Busca pessoa pelas 3 primeiras letras do nome");
         List<PersonDto> list = personService.findByPrefix(prefix);
-        log.info("Pessoas encontradas: {}", list);
         return ResponseEntity.ok(list);
     }
 
@@ -92,10 +84,8 @@ public class PersonController {
     })
     @PostMapping
     public ResponseEntity<PersonDto> insert(@RequestBody PersonDto person){
-        log.info("Inserção de uma nova pessoa");
         person = personService.insert(person);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(person.getId()).toUri();
-        log.info("Pessoa inserida com o ID: {}", person.getId());
         return ResponseEntity.created(uri).body(person);
     }
 
@@ -106,9 +96,7 @@ public class PersonController {
     })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        log.info("Deleta uma pessoa através do ID");
         personService.delete(id);
-        log.info("Pessoa deletada com o ID: {}", id);
         return ResponseEntity.noContent().build();
     }
 
@@ -120,9 +108,7 @@ public class PersonController {
     })
     @PutMapping(value = "/{id}")
     public ResponseEntity<PersonDto> update(@PathVariable Long id, @RequestBody PersonDto dto){
-        log.info("Atualiza uma pessoa através do ID");
         dto = personService.update(id, dto);
-        log.info("Pessoa atualizada com sucesso. ID: {}", id);
         return ResponseEntity.ok().body(dto);
     }
 

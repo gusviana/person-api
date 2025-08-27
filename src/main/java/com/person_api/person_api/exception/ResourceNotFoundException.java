@@ -7,6 +7,6 @@ public class ResourceNotFoundException extends RuntimeException{
     }
 
     public ResourceNotFoundException(String msg){
-        super(msg);
+        super("Pessoa não encontrada com CPF: " + msg);
     }
 }
