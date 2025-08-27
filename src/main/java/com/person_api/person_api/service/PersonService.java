@@ -2,6 +2,9 @@ package com.person_api.person_api.service;
 
 import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
+import com.person_api.person_api.exception.CpfAlreadyExistsException;
+import com.person_api.person_api.exception.InvalidPrefixException;
+import com.person_api.person_api.exception.ResourceNotFoundException;
 import com.person_api.person_api.mapper.PersonMapper;
 import com.person_api.person_api.repository.PersonRepository;
 import lombok.AllArgsConstructor;
@@ -29,37 +32,50 @@ public class PersonService {
 
     public PersonDto findById(Long id) {
         Person person = personRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
         return personMapper.toDto(person);
     }
 
     public PersonDto findByCpf(String cpf) {
         Person person = personRepository.findByCpf(cpf)
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada com CPF: " + cpf));
+                .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com CPF: " + cpf));
         return personMapper.toDto(person);
     }
 
     public List<PersonDto> findByPrefix(String prefix) {
         if (prefix == null || prefix.length() < 3) {
-            return Collections.emptyList();
+            throw new InvalidPrefixException(prefix);
         }
         return personRepository.findByNameStartingWithIgnoreCaseOrderByName(prefix)
                 .stream().map(personMapper::toDto).toList();
     }
 
     public PersonDto insert(PersonDto dto) {
+        if (personRepository.findByCpf(dto.getCpf()).isPresent()) {
+            throw new CpfAlreadyExistsException(dto.getCpf());
+        }
+
         Person entity = personMapper.toEntity(dto);
         entity = personRepository.save(entity);
         return personMapper.toDto(entity);
     }
 
     public void delete(Long id) {
+        if(!personRepository.existsById(id)){
+            throw new ResourceNotFoundException(id);
+        }
         personRepository.deleteById(id);
     }
 
     public PersonDto update(Long id, PersonDto dto) {
         Person entity = personRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        Optional<Person> existingCpf = personRepository.findByCpf(dto.getCpf());
+        if(existingCpf.isPresent() && !existingCpf.get().getId().equals(id)) {
+            throw new CpfAlreadyExistsException(dto.getCpf());
+        }
+
         updateData(entity, dto);
         Person updated = personRepository.save(entity);
         return personMapper.toDto(updated);

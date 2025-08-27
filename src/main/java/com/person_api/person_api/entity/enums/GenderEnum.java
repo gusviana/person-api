@@ -6,7 +6,7 @@ public enum GenderEnum {
 
     private int code;
 
-    private GenderEnum(int code) {
+    GenderEnum(int code) {
         this.code = code;
     }
 
@@ -14,7 +14,7 @@ public enum GenderEnum {
         return code;
     }
 
-    public static GenderEnum valueOf(int code) {
+    public static GenderEnum valueOfCode(int code) {
         for (GenderEnum value : GenderEnum.values()) {
             if (value.getCode() == code) {
                 return value;

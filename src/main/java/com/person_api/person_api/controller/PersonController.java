@@ -46,7 +46,7 @@ public class PersonController {
     @Operation(summary = "Retorna a pessoa pelo Id",description = "Retorna a pessoa pelo Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retorna pessoa pelo Id digitado"),
-            @ApiResponse(responseCode = "500", description = "Id não existe")
+            @ApiResponse(responseCode = "404", description = "Id não existe")
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<PersonDto> findById(@PathVariable Long id){
@@ -73,8 +73,8 @@ public class PersonController {
     @Operation(summary = "retorna pessoa com as 3 letras iniciais",description = "retorna pessoa com as 3 letras iniciais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pessoa encontrada"),
-            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
-            @ApiResponse(responseCode = "400", description = "CPF inválido")
+            @ApiResponse(responseCode = "404", description = "Não há pessoa com este prefixo"),
+            @ApiResponse(responseCode = "400", description = "prefixo inválido")
     })
     @GetMapping("/prefix/{prefix}")
     public ResponseEntity <List<PersonDto>> findByPrefix(@RequestParam String prefix){

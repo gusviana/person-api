@@ -1,7 +1,6 @@
 package com.person_api.person_api.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.person_api.person_api.entity.enums.GenderEnumConverter;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.person_api.person_api.entity.enums.GenderEnum;
@@ -13,7 +12,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tb_person")
@@ -42,7 +40,6 @@ public class Person implements Serializable {
     @Column(unique = true)
     private String cpf;
 
-    @Convert(converter = GenderEnumConverter.class)
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private GenderEnum genderEnum;
