@@ -87,7 +87,8 @@ public class PersonController {
     @Operation(summary = "Insere uma nova pessoa", description = "Insere uma nova pessoa")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "pessoa criada com sucesso"),
-            @ApiResponse(responseCode = "500", description = "dados passados incorretamente")
+            @ApiResponse(responseCode = "500", description = "dados passados incorretamente"),
+            @ApiResponse(responseCode = "409", description = "CPF já cadastrado")
     })
     @PostMapping
     public ResponseEntity<PersonDto> insert(@RequestBody PersonDto person){
@@ -101,7 +102,7 @@ public class PersonController {
     @Operation(summary = "Deleta uma pessoa por Id",description = "Deleta uma pessoa por Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pessoa deletada com sucesso."),
-            @ApiResponse(responseCode = "500", description = "Id não existe")
+            @ApiResponse(responseCode = "404", description = "Id não existe")
     })
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
@@ -114,7 +115,8 @@ public class PersonController {
     @Operation(summary = "Atualiza uma pessoa por Id",description = "Atualiza uma pessoa por Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pessoa Atualizada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Bad request")
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "409", description = "CPF já cadastrado")
     })
     @PutMapping(value = "/{id}")
     public ResponseEntity<PersonDto> update(@PathVariable Long id, @RequestBody PersonDto dto){
