@@ -24,7 +24,7 @@ public class CarController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Car> findById(@PathVariable Long id){
+    public ResponseEntity<Car> findById(@PathVariable String id){
         Car car = carService.findById(id);
         return ResponseEntity.ok().body(car);
     }
@@ -37,13 +37,13 @@ public class CarController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(@PathVariable String id){
         carService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Car> update(@PathVariable Long id, @RequestBody Car car){
+    public ResponseEntity<Car> update(@PathVariable String id, @RequestBody Car car){
         car = carService.update(id, car);
         return ResponseEntity.ok().body(car);
     }

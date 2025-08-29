@@ -21,7 +21,7 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car findById(Long id){
+    public Car findById(String id){
         Optional<Car> car = carRepository.findById(id);
         return car.orElseThrow(() -> new ResourceNotFoundException(id));
     }
@@ -30,14 +30,14 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public void delete(Long id){
+    public void delete(String id){
         if(!carRepository.existsById(id)){
             throw new ResourceNotFoundException(id);
         }
         carRepository.deleteById(id);
     }
 
-    public Car update(Long id, Car car){
+    public Car update(String id, Car car){
         Car entity = carRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(id));
 

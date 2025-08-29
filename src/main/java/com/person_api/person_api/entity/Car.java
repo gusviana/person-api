@@ -1,16 +1,13 @@
 package com.person_api.person_api.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Entity
-@Table(name = "tb_Car")
+@Document(collection = "tb_car")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,8 +17,7 @@ import java.io.Serializable;
 public class Car implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @NotNull(message = "O campo modelo não pode ser nulo!")
     private String modelo;
