@@ -2,6 +2,7 @@ package com.person_api.person_api.controller;
 
 import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
+import com.person_api.person_api.entity.PersonCar;
 import com.person_api.person_api.entity.enums.GenderEnum;
 import com.person_api.person_api.service.PersonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@Tag(name = "Person", description = "API para gerenciar pessoas")
+@Tag(name = "Person", description = "Endpoints para gerenciar pessoas")
 @RequestMapping(value = "/persons")
 @RequiredArgsConstructor
 public class PersonController {
@@ -111,5 +112,26 @@ public class PersonController {
         dto = personService.update(id, dto);
         return ResponseEntity.ok().body(dto);
     }
+
+
+    @PostMapping("/{cpf}/cars/{placa}")
+    public ResponseEntity<PersonCar> linkCarToPerson(@PathVariable String cpf, @PathVariable String placa){
+        PersonCar personCar = personService.linkPersonToCar(cpf, placa);
+        return ResponseEntity.ok(personCar);
+    }
+
+    @GetMapping("/{cpf}/cars")
+    public ResponseEntity<List<PersonCar>>getCarByPerson(@PathVariable String cpf){
+        List<PersonCar> car = personService.getCarByPerson()
+        return ResponseEntity.ok(car);
+    }
+
+    //vc VAI ENVIAR NO BODY O CPF E PLACA
+    // SE A PESSOA EXISTE, E SE O PLACA EXISTE
+    // SE SALVAR NA ENTIDADE CPF PLACA
+
+    //CRIAR GET NESSA TABELA, PASSANDO O CPF
+
+    //VAI RETORNAR A PESSOA + CARRO
 
 }

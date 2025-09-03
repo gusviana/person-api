@@ -1,11 +1,15 @@
 package com.person_api.person_api.service;
 
+import com.person_api.person_api.client.CarClient;
+import com.person_api.person_api.client.car.dto.Car;
 import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
+import com.person_api.person_api.entity.PersonCar;
 import com.person_api.person_api.exception.CpfAlreadyExistsException;
 import com.person_api.person_api.exception.InvalidPrefixException;
 import com.person_api.person_api.exception.ResourceNotFoundException;
 import com.person_api.person_api.mapper.PersonMapper;
+import com.person_api.person_api.repository.PersonCarRepository;
 import com.person_api.person_api.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +28,10 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final PersonCarRepository personCarRepository;
     private final PersonMapper personMapper;
     private final MessageSource messageSource;
+    private final CarClient carClient;
 
     private String getMessage(String key, Object... args) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -124,5 +130,26 @@ public class PersonService {
         entity.setDataNascimento(dto.getDataNascimento());
         entity.setCpf(dto.getCpf());
         entity.setGenderEnum(dto.getGenderEnum());
+    }
+
+    public PersonCar linkPersonToCar(String cpf, String placa){
+        personCarRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com CPF: " + cpf));
+
+        Car car = carClient.getCarByPlaca(placa);
+        if(car == null){
+            throw new ResourceNotFoundException("Carro não encontrado com a placa: " + placa);
+        }
+
+        PersonCar personCar = new PersonCar();
+        personCar.setCpf(cpf);
+        personCar.setPlaca(placa);
+
+        return personCarRepository.save(personCar);
+    }
+
+    public PersonCar getCarByPerson(String cpf) {
+        return personCarRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum carro vinculado para o CPF: " + cpf));
     }
 }
