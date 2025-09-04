@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Car {
-    private Long id;
+    private String id;
     private String placa;
     private String modelo;
     private String renavam;

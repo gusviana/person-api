@@ -1,5 +1,6 @@
 package com.person_api.person_api.entity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,4 +27,7 @@ public class PersonCar {
 
     @NotNull(message = "O campo placa não pode ser nulo!")
     private String placa;
+
+    @NotNull(message = "O campo nome não pode ser nulo!")
+    private String name;
 }

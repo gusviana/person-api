@@ -13,7 +13,7 @@ public interface CarClient {
     @GetMapping("/cars/person/{personId}")
     List<String> getCarsByPerson(@PathVariable("personId") Long personId);
 
-    @GetMapping("/{placa}")
+    @GetMapping("/cars/{placa}")
     Car getCarByPlaca(@PathVariable("placa") String placa);
 }
  

@@ -1,9 +1,9 @@
 package com.person_api.person_api.service;
 
+import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.client.CarClient;
 import com.person_api.person_api.client.car.dto.Car;
 import com.person_api.person_api.dto.PersonDto;
-import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.entity.PersonCar;
 import com.person_api.person_api.exception.CpfAlreadyExistsException;
 import com.person_api.person_api.exception.InvalidPrefixException;
@@ -11,16 +11,13 @@ import com.person_api.person_api.exception.ResourceNotFoundException;
 import com.person_api.person_api.mapper.PersonMapper;
 import com.person_api.person_api.repository.PersonCarRepository;
 import com.person_api.person_api.repository.PersonRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -133,7 +130,7 @@ public class PersonService {
     }
 
     public PersonCar linkPersonToCar(String cpf, String placa){
-        personCarRepository.findByCpf(cpf)
+        Person person = personRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com CPF: " + cpf));
 
         Car car = carClient.getCarByPlaca(placa);
@@ -144,6 +141,7 @@ public class PersonService {
         PersonCar personCar = new PersonCar();
         personCar.setCpf(cpf);
         personCar.setPlaca(placa);
+        personCar.setName(person.getName());
 
         return personCarRepository.save(personCar);
     }

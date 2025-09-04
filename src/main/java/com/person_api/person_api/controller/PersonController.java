@@ -121,8 +121,8 @@ public class PersonController {
     }
 
     @GetMapping("/{cpf}/cars")
-    public ResponseEntity<List<PersonCar>>getCarByPerson(@PathVariable String cpf){
-        List<PersonCar> car = personService.getCarByPerson()
+    public ResponseEntity<PersonCar>getCarByPerson(@PathVariable String cpf){
+        PersonCar car = personService.getCarByPerson(cpf);
         return ResponseEntity.ok(car);
     }
 
