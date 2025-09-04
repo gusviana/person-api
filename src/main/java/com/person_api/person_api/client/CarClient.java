@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @FeignClient(name = "car-service", url = "${car.client.url}")
 public interface CarClient {
@@ -14,6 +15,6 @@ public interface CarClient {
     List<String> getCarsByPerson(@PathVariable("personId") Long personId);
 
     @GetMapping("/cars/{placa}")
-    Car getCarByPlaca(@PathVariable("placa") String placa);
+    Optional<Car> getCarByPlaca(@PathVariable("placa") String placa);
 }
  

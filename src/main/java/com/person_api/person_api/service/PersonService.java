@@ -133,15 +133,14 @@ public class PersonService {
         Person person = personRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com CPF: " + cpf));
 
-        Car car = carClient.getCarByPlaca(placa);
-        if(car == null){
-            throw new ResourceNotFoundException("Carro não encontrado com a placa: " + placa);
-        }
+        Car car = carClient.getCarByPlaca(placa)
+                .orElseThrow(() -> new ResourceNotFoundException("Carro não encontrado com a placa: " + placa));
 
-        PersonCar personCar = new PersonCar();
-        personCar.setCpf(cpf);
-        personCar.setPlaca(placa);
-        personCar.setName(person.getName());
+        PersonCar personCar = PersonCar.builder()
+                .cpf(person.getCpf())
+                .placa(car.getPlaca())
+                .name(person.getName())
+                .build();
 
         return personCarRepository.save(personCar);
     }
