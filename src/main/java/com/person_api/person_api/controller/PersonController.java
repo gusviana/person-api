@@ -1,8 +1,11 @@
 package com.person_api.person_api.controller;
 
+import com.person_api.person_api.dto.PersonCarCepDto;
+import com.person_api.person_api.dto.PersonCarDto;
 import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.entity.PersonCar;
+import com.person_api.person_api.entity.PersonCarCep;
 import com.person_api.person_api.entity.enums.GenderEnum;
 import com.person_api.person_api.service.PersonService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,23 +118,27 @@ public class PersonController {
 
 
     @PostMapping("/{cpf}/cars/{placa}")
-    public ResponseEntity<PersonCar> linkCarToPerson(@PathVariable String cpf, @PathVariable String placa){
-        PersonCar personCar = personService.linkPersonToCar(cpf, placa);
-        return ResponseEntity.ok(personCar);
+    public ResponseEntity<PersonCarDto> linkCarToPerson(@PathVariable String cpf, @PathVariable String placa){
+        PersonCarDto personCarDto = personService.linkPersonToCar(cpf, placa);
+        return ResponseEntity.ok(personCarDto);
     }
 
     @GetMapping("/{cpf}/cars")
-    public ResponseEntity<PersonCar>getCarByPerson(@PathVariable String cpf){
-        PersonCar car = personService.getCarByPerson(cpf);
+    public ResponseEntity<PersonCarDto>getCarByPerson(@PathVariable String cpf){
+        PersonCarDto car = personService.getCarByPerson(cpf);
         return ResponseEntity.ok(car);
     }
 
-    //vc VAI ENVIAR NO BODY O CPF E PLACA
-    // SE A PESSOA EXISTE, E SE O PLACA EXISTE
-    // SE SALVAR NA ENTIDADE CPF PLACA
+    @PostMapping("/{cpf}/cars/{placa}/cep/{cep}")
+    public ResponseEntity<PersonCarCepDto> linkPersonToCarToCef(@PathVariable String cpf, @PathVariable String placa, @PathVariable String cep){
+        PersonCarCepDto personCarCepDto = personService.linkPersonToCarToCep(cpf, placa, cep);
+        return ResponseEntity.ok(personCarCepDto);
+    }
 
-    //CRIAR GET NESSA TABELA, PASSANDO O CPF
-
-    //VAI RETORNAR A PESSOA + CARRO
+    @GetMapping("/{cpf}/cars/cep")
+    public ResponseEntity<PersonCarCepDto>getPersonToCarToCep(@PathVariable String cpf){
+        PersonCarCepDto PersoncarCep = personService.getPersonToCarToCep(cpf);
+        return ResponseEntity.ok(PersoncarCep);
+    }
 
 }

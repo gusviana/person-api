@@ -1,14 +1,22 @@
 package com.person_api.person_api.service;
 
+import com.person_api.person_api.client.ViaCepFeign;
+import com.person_api.person_api.client.dto.endereco.Endereco;
+import com.person_api.person_api.dto.PersonCarCepDto;
+import com.person_api.person_api.dto.PersonCarDto;
 import com.person_api.person_api.entity.Person;
 import com.person_api.person_api.client.CarClient;
 import com.person_api.person_api.client.car.dto.Car;
 import com.person_api.person_api.dto.PersonDto;
 import com.person_api.person_api.entity.PersonCar;
+import com.person_api.person_api.entity.PersonCarCep;
 import com.person_api.person_api.exception.CpfAlreadyExistsException;
 import com.person_api.person_api.exception.InvalidPrefixException;
 import com.person_api.person_api.exception.ResourceNotFoundException;
+import com.person_api.person_api.mapper.PersonCarCepMapper;
+import com.person_api.person_api.mapper.PersonCarMapper;
 import com.person_api.person_api.mapper.PersonMapper;
+import com.person_api.person_api.repository.PersonCarCepRepository;
 import com.person_api.person_api.repository.PersonCarRepository;
 import com.person_api.person_api.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +34,13 @@ public class PersonService {
 
     private final PersonRepository personRepository;
     private final PersonCarRepository personCarRepository;
+    private final PersonCarCepRepository personCarCepRepository;
     private final PersonMapper personMapper;
+    private final PersonCarMapper personCarMapper;
+    private final PersonCarCepMapper personCarCepMapper;
     private final MessageSource messageSource;
     private final CarClient carClient;
+    private final ViaCepFeign viaCepFeign;
 
     private String getMessage(String key, Object... args) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -129,7 +141,7 @@ public class PersonService {
         entity.setGenderEnum(dto.getGenderEnum());
     }
 
-    public PersonCar linkPersonToCar(String cpf, String placa){
+    public PersonCarDto linkPersonToCar(String cpf, String placa){
         Person person = personRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com CPF: " + cpf));
 
@@ -142,11 +154,43 @@ public class PersonService {
                 .name(person.getName())
                 .build();
 
-        return personCarRepository.save(personCar);
+        personCarRepository.save(personCar);
+        return personCarMapper.toDto(personCar);
     }
 
-    public PersonCar getCarByPerson(String cpf) {
-        return personCarRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ResourceNotFoundException("Nenhum carro vinculado para o CPF: " + cpf));
+    public PersonCarDto getCarByPerson(String cpf) {
+        PersonCar personCar = personCarRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum carro vinculado para o cpf: " + cpf));
+
+         return personCarMapper.toDto(personCar);
+    }
+
+    public PersonCarCepDto linkPersonToCarToCep(String cpf, String placa, String cep){
+        Person person = personRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrada com o cpf: " + cpf));
+
+        Car car = carClient.getCarByPlaca(placa)
+                .orElseThrow(() -> new ResourceNotFoundException("carro não encontrado com a placa: " + placa));
+
+        Endereco endereco = viaCepFeign.buscarEnderecoPorCep(cep);
+                if(endereco == null){
+                    throw new ResourceNotFoundException("Endereço não encontrado com o CEP: " + cep);
+                }
+
+        PersonCarCep personCarCep = PersonCarCep.builder()
+                .cpf(person.getCpf())
+                .placa(car.getPlaca())
+                .cep(endereco.getCep())
+                .build();
+
+        personCarCepRepository.save(personCarCep);
+        return personCarCepMapper.toDto(personCarCep);
+    }
+
+    public PersonCarCepDto getPersonToCarToCep(String cpf){
+        PersonCarCep personCarCep = personCarCepRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("Nenhum cep e carro vinculado para este cpf: " + cpf));
+
+        return personCarCepMapper.toDto(personCarCep);
     }
 }
